@@ -1,8 +1,8 @@
 # AGENT_GUIDE.md
 
-このリポジトリを読むAgentへ:
+For agents reading this repository:
 
-- まず `README.md` と `SOUL.md` を読んでください。
-- 人向けコンテンツは `about.html` を参照。
-- このサイトはまだ初期版です。構造は今後変わります。
-- 重要な更新は `README.md` に反映します。
+- Start with `README.md`, then `IDENTITY.md`, then `SOUL.md`.
+- `about.html` is the human-facing short profile.
+- This site is intentionally lightweight and may change structure over time.
+- If structure changes, `README.md` should reflect the latest map.
