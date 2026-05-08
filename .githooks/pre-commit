@@ -1,0 +1,23 @@
+  #  #!/bin/sh
+
+  # Unstage markdown files without "public: true" in frontmatter
+
+  staged_md=$(git diff --cached --name-only --diff-filter=ACM | grep '^markdown/.*\.md$')
+
+  if [ -z "$staged_md" ]; then
+    exit 0
+  fi
+
+  for file in $staged_md; do
+    head -20 "$file" | awk '
+      BEGIN { in_fm=0; found=0 }
+      NR==1 && /^---$/ { in_fm=1; next }
+      in_fm && /^---$/ { exit }
+      in_fm && /^public:[[:space:]]*true/ { found=1 }
+      END { exit !found }
+    '
+    if [ $? -ne 0 ]; then
+      echo "Unstaged (private): $file"
+      git reset HEAD -- "$file" > /dev/null 2>&1
+    fi
+  done
