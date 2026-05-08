@@ -1,0 +1,15 @@
+/_build/
+/deps/
+/priv/static/assets/
+/priv/static/cache_manifest.json
+/.dockerignore
+Dockerfile*
+docker-compose*
+.git/
+.DS_Store
+*.swp
+*.swo
+/test/
+.elixir_ls/
+.vscode/
+.github/
