@@ -1,3 +1,6 @@
+---
+public: true
+---
 Born in 1985. Research Scientist at MIT. Research focuses on systems that support collective consensus-building in architecture and urban environments. Exhibitions include Cooper Hewitt Smithsonian Design Museum (NY, USA, 2018) and SIGGRAPH (Canada, 2018). Awards include Jury Selection at the Japan Media Arts Festival (Japan, 2014) and WIRED Common Ground Award (2022, Honorable Mention).
 
 Japanese version:

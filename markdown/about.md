@@ -1,4 +1,6 @@
-
+---
+public: true
+---
 ![portrait](images/yasushisakai01_square_2025_small.jpg)
 
 [High Res Portrait](images/yasushisakai01_square_2025.jpg)
