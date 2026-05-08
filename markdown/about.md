@@ -7,4 +7,4 @@ public: true
 
 [CV](https://docs.google.com/document/d/18QAK4N-yarIxPWkp7SFj7faYX5llC8im/edit)
 /
-[Bio](pages/bio)
+[Bio](/pages/bio)
