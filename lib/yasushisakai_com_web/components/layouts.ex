@@ -35,15 +35,18 @@ defmodule YasushisakaiComWeb.Layouts do
 
   def app(assigns) do
     ~H"""
-    <header class="navbar px-0 max-w-2xl mx-auto">
-      <div class="flex-1">
-        <a href={~p"/"}> Yasushi Sakai</a>
-      </div>
-      <div class="flex-none">
-        <ul class="flex px-1 space-x-4">
-          <li><a href={~p"/pages"} class="btn btn-ghost">Pages</a></li>
-        </ul>
-      </div>
+    <!-- <header class="navbar px-4 sm:px-0 max-w-2xl mx-auto"> -->
+    <header class="px-4 sm:px-6 lg:px-8">
+      <nav class="navbar px-0 max-w-2xl mx-auto">
+        <div class="flex-1">
+          <a href={~p"/"}> Yasushi Sakai</a>
+        </div>
+        <div class="flex-none">
+          <ul class="flex px-1 space-x-4">
+            <li><a href={~p"/pages"} class="btn btn-ghost">Pages</a></li>
+          </ul>
+        </div>
+      </nav>
     </header>
 
     <main class="px-4 py-20 sm:px-6 lg:px-8">
