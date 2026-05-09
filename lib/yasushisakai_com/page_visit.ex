@@ -20,13 +20,13 @@ defmodule YasushisakaiCom.PageVisit do
 
   def sorted_slugs do
 
+    all = YasushisakaiCom.Markdown.all_names() -- @blacklist
+
     visited = 
       from(p in __MODULE__, order_by: [desc: p.count], select: p.slug )
       |> YasushisakaiCom.Repo.all()
-      |> Enum.map(&String.to_existing_atom/1)
-      |> Enum.reject(&(&1 in @blacklist))
-
-    all = YasushisakaiCom.Markdown.all_names()
+      |> Enum.map(&String.to_atom/1)
+      |> Enum.filter(&(&1 in all))
 
     visited ++ (all -- visited)
   end

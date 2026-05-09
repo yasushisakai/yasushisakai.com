@@ -103,3 +103,26 @@
 [data-phx-session], [data-phx-teleported-src] { display: contents }
 
 /* This file is for your main application CSS */
+@layer base {
+  main a {
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+
+  main a:hover {
+    background-color: oklch(95% 0.08 90);
+  }
+
+  [data-theme="dark"] main a:hover {
+    background-color: oklch(40% 0.08 90);
+  }
+
+  main h1 {
+    font-weight: 500;
+  }
+
+}
+
+
+
+
