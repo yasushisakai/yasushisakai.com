@@ -32,7 +32,7 @@ defmodule YasushisakaiCom.Markdown do
 
     html = 
       body
-      |> Earmark.as_html!()
+      |> Earmark.as_html!(%Earmark.Options{footnotes: true})
       |> String.replace(~s(src="images/), ~s(src="/images/))
 
     def content(unquote(name)), do: unquote(html)
