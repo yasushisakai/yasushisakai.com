@@ -20,6 +20,7 @@ defmodule YasushisakaiComWeb.Router do
     get "/", PageController, :home
     get "/pages", PageController, :pages
     get "/pages/:name", PageController, :single_page
+    get "/tags", PageController, :tags_index
 
     live "/search", SearchLive
   end

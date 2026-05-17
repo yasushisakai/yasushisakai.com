@@ -1,0 +1,15 @@
+<div class="flex flex-col space-y-4">
+  <a href="/pages">All notes</a>
+
+
+  <div>
+    <h1>Tags</h1>
+    <ul :if={@counts !=[]}>
+      <li :for={{tag, count} <- @counts} class="my-1">
+        <a href={~p"/pages?#{[all: tag]}"}>{tag}</a>
+        <span class="text-slate-500 text-sm">({count})</span>
+      </li>
+    </ul>
+    <p :if={@counts == []} class="text-slate-500">No tags yet.</p>
+  </div>
+</div>

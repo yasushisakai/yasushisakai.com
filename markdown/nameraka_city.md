@@ -1,5 +1,6 @@
 ---
 public: true
+tags: research, city science
 ---
 
 # なめらか都市構想

@@ -18,15 +18,32 @@ defmodule YasushisakaiCom.Markdown do
 
     raw = File.read!(file)
 
-    body =
+    {fm, body} = 
       case raw do
         "---\n" <> rest ->
           case String.split(rest, ~r/\n---\n/, parts: 2) do
-            [_fm, b] -> b
-            _ -> "---\n" <> rest
+            [fm, b] -> {fm, b}
+            _ -> {"", "---\n" <> rest}
           end
-        _ -> raw
+        _ -> {"", raw}
       end
+
+    tags = 
+      fm 
+      |> String.split("\n")
+      |> Enum.find_value([], fn line ->
+        case line |> String.trim() |> String.split(":", parts: 2) do
+          ["tags", rest] ->
+            rest
+            |> String.split(",")
+            |> Enum.map(&String.trim/1)
+            |> Enum.map(&String.downcase/1)
+            |> Enum.reject(&(&1 == ""))
+            |> Enum.sort()
+          _ -> 
+            nil
+        end
+      end)
 
     hash = :crypto.hash(:sha256, body) |> Base.encode16(case: :lower)
 
@@ -38,6 +55,7 @@ defmodule YasushisakaiCom.Markdown do
     def content(unquote(name)), do: unquote(html)
     def raw(unquote(name)), do: unquote(body)
     def content_hash(unquote(name)), do: unquote(hash)
+    def tags(unquote(name)), do: unquote(tags)
 
   end
 
