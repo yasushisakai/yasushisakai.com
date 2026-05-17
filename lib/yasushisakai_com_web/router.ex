@@ -20,6 +20,8 @@ defmodule YasushisakaiComWeb.Router do
     get "/", PageController, :home
     get "/pages", PageController, :pages
     get "/pages/:name", PageController, :single_page
+
+    live "/search", SearchLive
   end
 
   # Other scopes may use custom stacks.

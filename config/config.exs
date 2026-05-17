@@ -22,6 +22,10 @@ config :yasushisakai_com, YasushisakaiComWeb.Endpoint,
   pubsub_server: YasushisakaiCom.PubSub,
   live_view: [signing_salt: "H6ZgPy23"]
 
+# Configure Types for Postgres Vector extensions
+config :yasushisakai_com, YasushisakaiCom.Repo,
+  types: YasushisakaiCom.PostgresTypes
+
 # Configure the mailer
 #
 # By default it uses the "Local" adapter which stores the emails

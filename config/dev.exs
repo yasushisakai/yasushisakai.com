@@ -10,6 +10,11 @@ config :yasushisakai_com, YasushisakaiCom.Repo,
   show_sensitive_data_on_connection_error: true,
   pool_size: 10
 
+config :yasushisakai_com, :embeddings,
+  base_url: System.get_env("VLLM_BASE_URL") || "http://promaxgb10-87f8.media.mit.edu:8000",
+  model:    System.get_env("VLLM_EMBED_MODEL") || "qwen3-embed",
+  dim: 4096
+
 # For development, we disable any cache and enable
 # debugging and code reloading.
 #

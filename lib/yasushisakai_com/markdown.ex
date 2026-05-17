@@ -28,12 +28,17 @@ defmodule YasushisakaiCom.Markdown do
         _ -> raw
       end
 
-      html = 
-        body
-        |> Earmark.as_html!()
-        |> String.replace(~s(src="images/), ~s(src="/images/))
+    hash = :crypto.hash(:sha256, body) |> Base.encode16(case: :lower)
+
+    html = 
+      body
+      |> Earmark.as_html!()
+      |> String.replace(~s(src="images/), ~s(src="/images/))
 
     def content(unquote(name)), do: unquote(html)
+    def raw(unquote(name)), do: unquote(body)
+    def content_hash(unquote(name)), do: unquote(hash)
+
   end
 
   def all_names do
@@ -42,4 +47,11 @@ defmodule YasushisakaiCom.Markdown do
       |> Enum.map(&(&1 |> Path.basename(".md") |> String.downcase() |> String.to_atom()))
     )
   end
+
+  def public_entries do
+    Enum.map(all_names(), fn name -> 
+      %{name: name, raw: raw(name), hash: content_hash(name)}
+    end)
+  end
+
 end

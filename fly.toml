@@ -3,8 +3,8 @@ primary_region = 'iad'
 
 [build]
 
-# [deploy]
-#   release_command = '/app/bin/migrate'
+[deploy]
+  release_command = '/app/bin/migrate'
 
 [env]
   PHX_HOST = 'yasushisakai.com'

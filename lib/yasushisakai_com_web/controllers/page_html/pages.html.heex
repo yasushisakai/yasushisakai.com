@@ -1,7 +1,13 @@
-<h1>Pages</h1>
 
-<ul>
-  <li :for={name <- @names}>
-    <a href={~p"/pages/#{name}"}>{name}</a>
-  </li>
-</ul>
+<div class="flex flex-col space-y-4">
+  <a href="/search">Search Notes</a>
+
+  <div>
+    <h1>List</h1>
+    <ul>
+      <li :for={name <- @names}>
+        <a href={~p"/pages/#{name}"}>{name}</a>
+      </li>
+    </ul>
+  </div>
+</div>
