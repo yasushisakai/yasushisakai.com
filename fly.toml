@@ -4,7 +4,7 @@ primary_region = 'iad'
 [build]
 
 [deploy]
-  release_command = '/app/bin/migrate'
+  release_command = "/app/bin/yasushisakai_com eval 'YasushisakaiCom.Release.deploy_setup()'"
 
 [env]
   PHX_HOST = 'yasushisakai.com'

@@ -5,6 +5,12 @@ defmodule YasushisakaiCom.Release do
   """
   @app :yasushisakai_com
 
+  def deploy_setup do
+    # order matters!
+    migrate()
+    seed_embeddings()
+  end
+
   def migrate do
     load_app()
 
