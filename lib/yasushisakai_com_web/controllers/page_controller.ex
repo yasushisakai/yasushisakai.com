@@ -21,11 +21,10 @@ defmodule YasushisakaiComWeb.PageController do
     any = parse_tags(params["any"])
     none = parse_tags(params["none"])
     
-    names = YasushisakaiCom.Pages.filter(all: all, any: any, none: none)
+    filtered = YasushisakaiCom.Pages.filter(all: all, any: any, none: none)
+    names = Enum.filter(YasushisakaiCom.PageVisit.sorted_slugs(), &(&1 in filtered))
 
     render(conn, :pages, 
-      # FIXME: dropping this for now
-      # names: YasushisakaiCom.PageVisit.sorted_slugs()
       names: names,
       all: all,
       any: any,
