@@ -126,6 +126,7 @@ MIT Media Lab City Scienceグループは、都市の意思決定プロセスを
 
 *なめらか都市構想 / **Nameraka Urbanism** A Manifesto for Continuous Cities*
 *MIT Media Lab — City Science Group*
+{:.no-right-flow}
 
 [^2]: 鈴木健『なめらかな社会とその敵』が提示する意思決定モデル（Propagational Proxy Voting）。個人が信頼する他者に投票権を委任し、その委任がさらに別の信頼相手へと連鎖的に伝播していくことで、専門知と民意が連続的に接続する。多数決による二値的決定でも純粋な代議制でもない、第三の意思集約のかたちとして構想されている。
 
