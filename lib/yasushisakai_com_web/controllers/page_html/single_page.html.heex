@@ -1,9 +1,11 @@
+<article lang={@lang}>
 {raw(@content)}
+</article>
 
-<div :if={@tags != []} class="flex flex-wrap gap=2 mb=4">
+<div :if={@tags != [] and @show_tags} class="flex flex-wrap gap=2 mb=4">
   <a 
     :for={tag <- @tags}
     href={~p"/pages?#{[all: tag]}"}
-    class="text-xs px-1.5 py-0.5 rounded bg-slate-100 hover:bg-slate-200 no-underline"
+    class="text-xs px-1.5 py-0.5 rounded bg-base-200 hover:bg-base-300 no-underline"
   >{tag}</a>
 </div>

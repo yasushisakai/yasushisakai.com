@@ -5,7 +5,7 @@ defmodule YasushisakaiComWeb.PageController do
     html_content = YasushisakaiCom.Markdown.content(:about)
     tags = YasushisakaiCom.Markdown.tags(:about)
     YasushisakaiCom.PageVisit.increment("index")
-    render(conn, :single_page, content: html_content, tags: tags)
+    render(conn, :single_page, content: html_content, tags: tags, lang: "en", show_tags: false)
   end
 
   def single_page(conn, %{"name" => name}) do
@@ -13,7 +13,8 @@ defmodule YasushisakaiComWeb.PageController do
     atom_name = String.to_existing_atom(name)
     html_content = YasushisakaiCom.Markdown.content(atom_name)
     tags = YasushisakaiCom.Markdown.tags(atom_name)
-    render(conn, :single_page, content: html_content, tags: tags)
+    lang = YasushisakaiCom.Markdown.lang(atom_name)
+    render(conn, :single_page, content: html_content, tags: tags, lang: lang, show_tags: true)
   end
 
   def pages(conn, params) do

@@ -45,17 +45,24 @@ defmodule YasushisakaiCom.Markdown do
         end
       end)
 
+    lang_value = 
+      case Enum.find(tags, &String.starts_with?(&1, "lang:")) do
+        "lang:" <> v -> v
+        _ -> "ja"
+      end
+
     hash = :crypto.hash(:sha256, body) |> Base.encode16(case: :lower)
 
     html = 
       body
-      |> Earmark.as_html!(%Earmark.Options{footnotes: true})
+      |> Earmark.as_html!(%Earmark.Options{footnotes: true, gfm_tables: true, breaks: true})
       |> String.replace(~s(src="images/), ~s(src="/images/))
 
     def content(unquote(name)), do: unquote(html)
     def raw(unquote(name)), do: unquote(body)
     def content_hash(unquote(name)), do: unquote(hash)
     def tags(unquote(name)), do: unquote(tags)
+    def lang(unquote(name)), do: unquote(lang_value)
 
   end
 

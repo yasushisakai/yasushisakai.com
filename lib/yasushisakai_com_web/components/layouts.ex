@@ -37,7 +37,8 @@ defmodule YasushisakaiComWeb.Layouts do
     ~H"""
     <!-- <header class="navbar px-4 sm:px-0 max-w-2xl mx-auto"> -->
     <header class="px-4 sm:px-6 lg:px-8">
-      <nav class="navbar px-0 max-w-2xl mx-auto">
+      <nav class="navbar px-0 max-w-2xl supports-[text-spacing-trim:trim-start]:lg:max-w-5xl supports-[text-spacing-trim:trim-start]:xl:max-w-7xl
+      mx-auto">
         <div class="flex-1">
           <a href={~p"/"}> Yasushi Sakai</a>
         </div>
@@ -50,7 +51,7 @@ defmodule YasushisakaiComWeb.Layouts do
     </header>
 
     <main class="px-4 py-20 sm:px-6 lg:px-8">
-      <div class="mx-auto max-w-2xl space-y-4">
+      <div class="mx-auto max-w-2xl supports-[text-spacing-trim:trim-start]:lg:max-w-5xl supports-[text-spacing-trim:trim-start]:xl:max-w-7xl space-y-4">
         {render_slot(@inner_block)}
       </div>
     </main>
