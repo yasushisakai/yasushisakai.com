@@ -33,20 +33,33 @@ defmodule YasushisakaiComWeb.Layouts do
 
   slot :inner_block, required: true
 
+  attr :current_path, :string, default: "/", doc: "current request path"
+
   def app(assigns) do
     ~H"""
     <!-- <header class="navbar px-4 sm:px-0 max-w-2xl mx-auto"> -->
     <header class="px-4 sm:px-6 lg:px-8">
       <nav class="navbar px-0 max-w-2xl supports-[text-spacing-trim:trim-start]:lg:max-w-5xl supports-[text-spacing-trim:trim-start]:xl:max-w-7xl
-      mx-auto">
-        <div class="flex-1">
-          <a href={~p"/"}> Yasushi Sakai</a>
-        </div>
-        <div class="flex-none">
-          <ul class="flex px-1 space-x-4">
-            <li><a href={~p"/pages"} class="btn btn-ghost">Pages</a></li>
+      mx-auto flex">
+          <ul class="flex">
+            <li :if={@current_path != "/"}>
+              <a href={~p"/"} class="btn btn-ghost">
+                <.icon name="hero-home" class="size-5" />
+              </a>
+            </li>
           </ul>
-        </div>
+          <ul class="flex px-1 space-x-4 ml-auto">
+            <li>
+              <a href={~p"/pages"} class="btn btn-ghost">
+                <.icon name="hero-list-bullet" class="size-5" />
+              </a>
+            </li>
+            <li>
+              <a href={~p"/search"} class="btn btn-ghost btn-square" aria-label="Search">
+                <.icon name="hero-magnifying-glass" class="size-5" />
+              </a>
+            </li>
+          </ul>
       </nav>
     </header>
 

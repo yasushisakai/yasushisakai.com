@@ -89,11 +89,10 @@ defmodule YasushisakaiComWeb.SearchLive do
 
     <p :if={@error}>error: {@error}</p>
 
-    <ul :if={@results != []} class="pl-3">
-      <li :for={r <- @results} class="my-1">
+    <ul :if={@results != []} class="list-none p-0 grid grid-cols-[max-content_1fr] gap-x-4 gap-y-1 items-baseline">
+      <li :for={r <- @results} class="contents">
         <a class="no-underline" href={~p"/pages/#{r.slug}"}>{r.slug}</a>
-        |
-        <small class="font-mono">dist: {Float.round(r.distance, 3)}</small>
+        <small class="font-mono">{Float.round(r.distance, 3)}</small>
       </li>
     </ul>
 

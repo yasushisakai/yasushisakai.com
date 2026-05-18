@@ -29,7 +29,7 @@
     </script>
   </head>
   <body>
-    <Layouts.app flash={assigns[:flash] || %{}}>
+    <Layouts.app flash={assigns[:flash] || %{}} current_path={assigns[:conn] && @conn.request_path || "/"}>
     {@inner_content}
     </Layouts.app>
   </body>
