@@ -1,6 +1,6 @@
 ---
 public: true
-tags: research, city science
+tags: research, city science, nameteki, lang:ja
 ---
 
 # なめらか都市構想

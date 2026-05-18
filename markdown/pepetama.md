@@ -1,5 +1,6 @@
 ---
 public: true
+tags: lang:ja, cooking
 ---
 
 ぺぺたまを作る

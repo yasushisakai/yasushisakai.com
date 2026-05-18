@@ -1,5 +1,6 @@
 ---
 public: true
+tags: research, nameteki, lang:en
 ---
 
 # Dividuals

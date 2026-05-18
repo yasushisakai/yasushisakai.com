@@ -1,5 +1,6 @@
 ---
 public: true
+tags: cooking, lang:ja
 ---
 ## インゲン豆を茹でる
 
