@@ -18,11 +18,10 @@ defmodule YasushisakaiComWeb.Router do
     pipe_through :browser
 
     get "/", PageController, :home
-    get "/pages", PageController, :pages
+    live "/pages", PagesLive
     get "/pages/:name", PageController, :single_page
     get "/tags", PageController, :tags_index
 
-    live "/search", SearchLive
   end
 
   # Other scopes may use custom stacks.

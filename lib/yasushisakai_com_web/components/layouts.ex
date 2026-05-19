@@ -51,12 +51,7 @@ defmodule YasushisakaiComWeb.Layouts do
           <ul class="flex px-1 space-x-4 ml-auto">
             <li>
               <a href={~p"/pages"} class="btn btn-ghost">
-                <.icon name="hero-list-bullet" class="size-5" />
-              </a>
-            </li>
-            <li>
-              <a href={~p"/search"} class="btn btn-ghost btn-square" aria-label="Search">
-                <.icon name="hero-magnifying-glass" class="size-5" />
+                <.icon name="hero-document-text" class="size-5" />
               </a>
             </li>
           </ul>
