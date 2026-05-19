@@ -1,6 +1,6 @@
 ---
 public: true
-tags: lang:en
+tags: lang:en, meta
 ---
 ![portrait](images/yasushisakai01_square_2025_small.jpg)
 

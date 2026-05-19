@@ -4,7 +4,7 @@ defmodule YasushisakaiCom.Search do
 
   alias YasushisakaiCom.{Embeddings, NoteEmbedding, Repo, SearchQuery}
 
-  @default_opts [limit: 5, threshold: 1.0, sort: "dist"]
+  @default_opts [limit: 5, threshold: 1.0, sort: "dist", slugs: nil]
 
   def search(query_text, opts \\ []) when is_binary(query_text) do
     opts = Keyword.merge(@default_opts, opts)
@@ -52,15 +52,16 @@ defmodule YasushisakaiCom.Search do
     limit     = Keyword.fetch!(opts, :limit)
     threshold = Keyword.fetch!(opts, :threshold)
     sort      = Keyword.fetch!(opts, :sort)
+    slugs     = Keyword.fetch!(opts, :slugs)
 
     inner = 
-      from(n in NoteEmbedding,
-        select: %{
+      NoteEmbedding
+        |> maybe_filter_slugs(slugs)
+        |> select([n], %{
           slug: n.slug,
           distance: cosine_distance(n.embedding, ^vector),
           inserted_at: n.inserted_at
-        }
-      )
+        })
 
     from(r in subquery(inner),
       where: r.distance <= ^threshold,
@@ -75,5 +76,9 @@ defmodule YasushisakaiCom.Search do
   defp order_clause(query, "new"),  do: order_by(query, [r], desc: r.inserted_at)
   defp order_clause(query, "old"),  do: order_by(query, [r], asc: r.inserted_at)
   defp order_clause(query, _),      do: order_by(query, [r], asc: r.distance)
+
+  defp maybe_filter_slugs(query, nil), do: query 
+  defp maybe_filter_slugs(query, []), do: query 
+  defp maybe_filter_slugs(query, slugs), do: from(n in query, where: n.slug in ^slugs) 
 
 end

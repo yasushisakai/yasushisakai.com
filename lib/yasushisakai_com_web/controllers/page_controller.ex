@@ -21,12 +21,18 @@ defmodule YasushisakaiComWeb.PageController do
     all = parse_tags(params["all"])
     any = parse_tags(params["any"])
     none = parse_tags(params["none"])
+    q = params |> Map.get("q", "") |> String.trim()
     
     filtered = YasushisakaiCom.Pages.filter(all: all, any: any, none: none)
-    names = Enum.filter(YasushisakaiCom.PageVisit.sorted_slugs(), &(&1 in filtered))
+
+    {names, results} = list_or_search(filtered, q)
+
+    # names = Enum.filter(YasushisakaiCom.PageVisit.sorted_slugs(), &(&1 in filtered))
 
     render(conn, :pages, 
       names: names,
+      results: results,
+      q: q,
       all: all,
       any: any,
       none: none
@@ -39,6 +45,21 @@ defmodule YasushisakaiComWeb.PageController do
       |> Enum.sort_by(fn {tag, _count} -> tag end)
 
     render(conn, :tags_index, counts: counts)
+  end
+
+  defp list_or_search(filtered, "") do
+    names = Enum.filter(YasushisakaiCom.PageVisit.sorted_slugs(), &(&1 in filtered))
+    {names, nil}
+  end
+
+  defp list_or_search(filtered, q) do
+    slugs = Enum.map(filtered, &Atom.to_string/1)
+
+    case YasushisakaiCom.Search.search(q, slugs: slugs, limit: 50) do
+      {:ok, results} -> {[], results}
+      {:error, _} -> {[], []}
+    end
+
   end
 
   def parse_tags(nil), do: []

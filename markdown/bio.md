@@ -1,5 +1,6 @@
 ---
 public: true
+tags: meta
 ---
 
 # Yasushi Sakai
