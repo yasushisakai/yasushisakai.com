@@ -111,6 +111,34 @@ defmodule YasushisakaiComWeb.PagesLive do
             autofocus
           />
     </form>
+    <details class="text-sm text-slate-500">
+      <summary class="cursor-pointer select-none">Query syntax</summary>
+      <dl class="mt-2 grid grid-cols-[max-content_1fr] gap-x-3 gap-y-1">
+        <dt class="font-mono">q</dt>
+        <dd>free-text query; cosine similarity over note embeddings</dd>
+
+        <dt class="font-mono">all</dt>
+        <dd>comma-separated tags; result must have <b>every</b> tag</dd>
+
+        <dt class="font-mono">any</dt>
+        <dd>comma-separated tags; result must have <b>at least one</b></dd>
+
+        <dt class="font-mono">none</dt>
+        <dd>comma-separated tags; exclude results having <b>any</b></dd>
+
+        <dt class="font-mono">t</dt>
+        <dd>distance threshold, 0.0–2.0 (lower = stricter; default 1.0)</dd>
+
+        <dt class="font-mono">l</dt>
+        <dd>max results, 1–200 (default 50)</dd>
+
+        <dt class="font-mono">sort</dt>
+        <dd><code>dist</code> | <code>new</code> | <code>old</code> (default <code>dist</code>)</dd>
+      </dl>
+      <p class="mt-2">
+        Example: <code>/pages?q=consensus&all=research&t=0.4&sort=new</code>
+      </p>
+    </details>
     <p><small>l={@limit} t={@threshold} sort={@sort}</small></p>
     </div>
 
