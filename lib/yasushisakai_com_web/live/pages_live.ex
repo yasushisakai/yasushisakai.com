@@ -24,15 +24,19 @@ defmodule YasushisakaiComWeb.PagesLive do
     q = params |> Map.get("q", "") |> String.trim()
     l = params |> Map.get("l", "50") |> parse_int(50, 1, 200)
     t = params |> Map.get("t", "1.0") |> parse_float(1.0, 0.0, 2.0)
-    sort = Map.get(params, "sort", "dist")
+    sort = coerce_sort(q, Map.get(params, "sort"))
 
     filtered = Pages.filter(all: all, any: any, none: none)
     {names, results} = list_or_search(filtered, q, limit: l, threshold: t, sort: sort)
 
+    # FIXME: do we need sorted_slugs?
+    total = length(PageVisit.sorted_slugs())
+
     {:noreply, 
       assign(socket, q: q, all: all, any: any, none: none, 
       limit: l, threshold: t, sort: sort,
-      names: names, results: results
+      names: names, results: results,
+      total: total
       )}
   end
 
@@ -46,21 +50,56 @@ defmodule YasushisakaiComWeb.PagesLive do
     |> Enum.reject(&(&1 == ""))
   end
 
-  defp list_or_search(filtered, "", _opts) do
-    names = Enum.filter(PageVisit.sorted_slugs(), &(&1 in filtered))
+  # when q is empty -> tag-filtering browse mode
+  defp list_or_search(filtered, "", opts) do
+    names = browse_names(filtered, Keyword.fetch!(opts, :sort), Keyword.fetch!(opts, :limit))
     {names, nil}
   end
-
+  
+  # search mode, cosine similarity mode is applied
   defp list_or_search(filtered, q, opts) do
     slugs = Enum.map(filtered, &Atom.to_string/1)
-    opts = Keyword.put(opts, :slugs, slugs)
+    requested_sort = Keyword.fetch!(opts, :sort)
 
-    case Search.search(q, opts) do
-      {:ok, results} -> {[], results}
+    search_opts = 
+      opts
+      |> Keyword.put(:slugs, slugs)
+      |> Keyword.put(:sort, db_sort(requested_sort))
+
+    case Search.search(q, search_opts) do
+      {:ok, results} -> {[], reorder(results, requested_sort)}
       {:error, _} -> {[], []}
     end
   end
 
+  defp db_sort("visits"), do: "dist"
+  defp db_sort(o), do: o
+
+  defp reorder(results, "visits") do
+    rank = 
+      PageVisit.sorted_slugs()
+      |> Enum.with_index()
+      |> Map.new(fn {slug, i} -> {Atom.to_string(slug), i} end)
+    Enum.sort_by(results, fn r -> Map.get(rank, r.slug, 1_000_000) end)
+  end
+
+  defp reorder(results, _), do: results
+
+  defp browse_names(filtered, "visits", limit) do
+    PageVisit.sorted_slugs()
+    |> Enum.filter(&(&1 in filtered))
+    |> Enum.take(limit)
+  end
+
+  defp browse_names(filtered, sort, limit) when sort in ["new", "old"] do
+    direction = if sort =="new", do: :desc, else: :asc
+    slugs = Enum.map(filtered, &Atom.to_string/1)
+
+    Search.slugs_by_date(slugs, direction)
+    |> Enum.take(limit)
+    |> Enum.map(&String.to_existing_atom/1)
+
+  end
   defp parse_int(str, default, min, max) when is_binary(str) do
     case Integer.parse(str) do
       {n, ""} when n >= min and n <= max -> n
@@ -75,8 +114,15 @@ defmodule YasushisakaiComWeb.PagesLive do
     end
   end
 
+  defp coerce_sort("", s) when s in ~w(visits new old), do: s
+  defp coerce_sort("", _), do: "visits"
+  defp coerce_sort(_q, s) when s in ~w(dist visits new old), do: s
+  defp coerce_sort(_q, _), do: "dist"
+
   @impl true
   def handle_event("search", %{"q" => q}, socket) do
+    sort = coerce_sort(q, socket.assigns.sort)
+
     params = 
       [q: q]
       |> add_params(:all, socket.assigns.all)
@@ -84,7 +130,7 @@ defmodule YasushisakaiComWeb.PagesLive do
       |> add_params(:none, socket.assigns.none)
       |> Keyword.put(:l, socket.assigns.limit)
       |> Keyword.put(:t, socket.assigns.threshold)
-      |> Keyword.put(:sort, socket.assigns.sort)
+      |> Keyword.put(:sort, sort)
 
     {:noreply, push_patch(socket, to: ~p"/pages?#{params}", replace: true)}
   end
@@ -98,48 +144,23 @@ defmodule YasushisakaiComWeb.PagesLive do
   <div class="flex flex-col space-y-3">
     <!-- Search -->
     <div>
-    <form phx-change="search">
-          <input
-            class="text-lg placeholder:italic placeholder:text-slate-400 block w-full border border-slate-300 rounded-md p-3 focus:outline-none focus:ring-slate-400
-  focus:ring-1"
-            type="text"
-            name="q"
-            value={@q}
-            placeholder="Search notes..."
-            phx-debounce="200"
-            autocomplete="off"
-            autofocus
-          />
-    </form>
-    <details class="text-sm text-slate-500">
-      <summary class="cursor-pointer select-none">Query syntax</summary>
-      <dl class="mt-2 grid grid-cols-[max-content_1fr] gap-x-3 gap-y-1">
-        <dt class="font-mono">q</dt>
-        <dd>free-text query; cosine similarity over note embeddings</dd>
-
-        <dt class="font-mono">all</dt>
-        <dd>comma-separated tags; result must have <b>every</b> tag</dd>
-
-        <dt class="font-mono">any</dt>
-        <dd>comma-separated tags; result must have <b>at least one</b></dd>
-
-        <dt class="font-mono">none</dt>
-        <dd>comma-separated tags; exclude results having <b>any</b></dd>
-
-        <dt class="font-mono">t</dt>
-        <dd>distance threshold, 0.0–2.0 (lower = stricter; default 1.0)</dd>
-
-        <dt class="font-mono">l</dt>
-        <dd>max results, 1–200 (default 50)</dd>
-
-        <dt class="font-mono">sort</dt>
-        <dd><code>dist</code> | <code>new</code> | <code>old</code> (default <code>dist</code>)</dd>
-      </dl>
-      <p class="mt-2">
-        Example: <code>/pages?q=consensus&all=research&t=0.4&sort=new</code>
-      </p>
-    </details>
-    <p><small>l={@limit} t={@threshold} sort={@sort}</small></p>
+      <form phx-change="search">
+            <input
+              class="text-lg placeholder:italic placeholder:text-slate-400 block w-full border border-slate-300 rounded-md p-3 focus:outline-none focus:ring-slate-400
+  fo  cus:ring-1"
+              type="text"
+              name="q"
+              value={@q}
+              placeholder="Search notes..."
+              phx-debounce="200"
+              autocomplete="off"
+              autofocus
+            />
+      </form>
+      <div class="flex justify-between items-baseline text-sm text-slate-500">
+        <span>{mode_header(assigns)}</span>
+        <a href={~p"/pages/how_to_use"} class="underline no-underline hover:underline">How to use</a>
+      </div>
     </div>
 
     <!-- Filtering-->
@@ -188,7 +209,6 @@ defmodule YasushisakaiComWeb.PagesLive do
             </div>
           </li>
         </ul>
-        <p :if={@names == []}>No notes match.</p>
       <% else %>
         <!-- search + tags -->
         <ul :if={@results != []} class="list-none p-0 grid grid-cols-[max-content_max-content_1fr] gap-x-4 gap-y-1 items-baseline">
@@ -208,10 +228,28 @@ defmodule YasushisakaiComWeb.PagesLive do
             </div>
           </li>
         </ul>
-        <p :if={@results == []}>No matches for "{@q}".</p>
       <% end %>
     </div>
   </div>
   """
   end
+
+defp mode_header(%{q: "", names: []}), do: "No notes match"
+
+defp mode_header(%{q: "", names: names, total: total, sort: sort}) do
+  count_str = if length(names) == total, do: "#{total}", else: "#{length(names)} of #{total}"
+  "Browsing #{count_str} notes. Sorted by #{sort_label(sort)}"
+end
+
+defp mode_header(%{results: [], q: q}), do: ~s(No matches for "#{q}")
+
+defp mode_header(%{results: results, q: q, sort: sort}) do
+  ~s(#{length(results)} results for "#{q}". Sorted by #{sort_label(sort)})
+end
+
+defp sort_label("visits"), do: "visits"
+defp sort_label("dist"), do: "similarity"
+defp sort_label("new"), do: "latest first"
+defp sort_label("old"), do: "oldest first"
+
 end

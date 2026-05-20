@@ -81,4 +81,14 @@ defmodule YasushisakaiCom.Search do
   defp maybe_filter_slugs(query, []), do: query 
   defp maybe_filter_slugs(query, slugs), do: from(n in query, where: n.slug in ^slugs) 
 
+  def slugs_by_date(slugs, direction) when direction in [:asc, :desc] do
+    order = [{direction, dynamic([n], n.inserted_at)}]
+
+    from(n in NoteEmbedding,
+      where: n.slug in ^slugs,
+      order_by: ^order,
+      select: n.slug
+    ) |> Repo.all()
+  end
+
 end
