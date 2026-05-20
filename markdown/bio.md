@@ -1,6 +1,7 @@
 ---
 public: true
 tags: meta
+title: Biography / CV
 ---
 
 # Yasushi Sakai

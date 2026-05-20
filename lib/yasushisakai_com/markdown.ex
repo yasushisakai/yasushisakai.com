@@ -51,6 +51,28 @@ defmodule YasushisakaiCom.Markdown do
         _ -> "ja"
       end
 
+    fm_title =
+      fm
+      |> String.split("\n")
+      |> Enum.find_value(fn line ->
+        case line |> String.trim |> String.split(":", parts: 2) do
+          ["title", t] -> String.trim(t)
+          _ -> nil
+        end
+      end)
+
+    title_value =
+      fm_title || 
+      (body
+      |> String.split("\n")
+      |> Enum.find_value(fn line ->
+        case Regex.run(~r/^\#{1,6}\s+(.+)$/, String.trim(line)) do
+          [_, t] -> t
+          _ -> nil
+        end
+      end)) ||
+      Atom.to_string(name)
+
     hash = :crypto.hash(:sha256, body) |> Base.encode16(case: :lower)
 
     html = 
@@ -63,6 +85,7 @@ defmodule YasushisakaiCom.Markdown do
     def content_hash(unquote(name)), do: unquote(hash)
     def tags(unquote(name)), do: unquote(tags)
     def lang(unquote(name)), do: unquote(lang_value)
+    def title(unquote(name)), do: unquote(title_value)
 
   end
 

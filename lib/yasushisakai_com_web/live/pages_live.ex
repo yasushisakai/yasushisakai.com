@@ -194,13 +194,16 @@ defmodule YasushisakaiComWeb.PagesLive do
     <div>
       <%= if is_nil(@results) do %>
         <!-- just tags -->
-        <ul :if={@names != []} class="list-none p-0 grid grid-cols-[max-content_1fr] gap-x-4 gap-y-1 items-baseline">
+        <ul :if={@names != []} class="list-none p-0 grid grid-cols-[max-content_1fr] gap-x-4 gap-y-3 items-start">
           <li class="contents text-sm uppercase tracking-white opacity-60">
             <span class="pl-1">Name</span>
             <span><a href="/tags">Tags</a></span>
           </li>
           <li :for={name <- @names} class="contents">
-            <a href={~p"/pages/#{name}"}>{name}</a>
+            <div>
+              <a href={~p"/pages/#{name}"} class="font-medium">{Markdown.title(name)}</a>
+              <span class="text-xs opacity-50 font-mono">{name}</span>
+            </div>
             <div class="flex flex-wrap gap-1">
               <a :for={tag <- Markdown.tags(name)}
                 href={~p"/pages?#{[all: tag]}"}
@@ -211,14 +214,17 @@ defmodule YasushisakaiComWeb.PagesLive do
         </ul>
       <% else %>
         <!-- search + tags -->
-        <ul :if={@results != []} class="list-none p-0 grid grid-cols-[max-content_max-content_1fr] gap-x-4 gap-y-1 items-baseline">
+        <ul :if={@results != []} class="list-none p-0 grid grid-cols-[max-content_max-content_1fr] gap-x-4 gap-y-3 items-start">
           <li class="contents text-sm uppercase tracking-white opacity-60">
             <span class="pl-1">Name</span>
             <span>Dist</span>
             <span><a href="/tags">Tags</a></span>
           </li>
           <li :for={r <- @results} class="contents">
-            <a href={~p"/pages/#{r.slug}"}>{r.slug}</a>
+            <div>
+              <a href={~p"/pages/#{r.slug}"} class="font-medium">{Markdown.title(String.to_existing_atom(r.slug))}</a>
+              <span class="text-xs opacity-50 font-mono">{r.slug}</span>
+            </div>
             <small class="font-mono">{Float.round(r.distance, 3)}</small>
             <div class="flex flex-wrap gap-1">
               <a :for={tag <- Markdown.tags(String.to_existing_atom(r.slug))}

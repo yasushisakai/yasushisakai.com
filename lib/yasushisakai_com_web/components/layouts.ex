@@ -50,7 +50,7 @@ defmodule YasushisakaiComWeb.Layouts do
           </ul>
           <ul class="flex px-1 space-x-4 ml-auto">
             <li>
-              <a href={~p"/pages"} class="btn btn-ghost">
+              <a href={~p"/pages?none=meta"} class="btn btn-ghost">
                 <.icon name="hero-document-text" class="size-5" />
               </a>
             </li>
