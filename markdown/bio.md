@@ -13,5 +13,5 @@ Detailed: [Curriculum Vitae](https://docs.google.com/document/d/18QAK4N-yarIxPWk
 
 ## 酒井 康史
 
-1985 年生まれ。MIT Media Lab にて博士号取得後、同研究所リサーチサイエンティスト。研究対象は建築や都市における集団的合意形成をサポートするシステム。クーパーヒューイット美術館(米国 NY 州, 2018)や Siggraph(カナダ,2018)など展示や、文化庁メディア芸術祭審査員推薦作品(日本,2014)や WIRED Common Ground Award(2022,入賞)受賞等
+1985 年生まれ。日建設計で勤務後、MIT Media Lab にて博士号取得、現在同研究所リサーチサイエンティスト。研究対象は建築や都市における集団的合意形成をサポートするシステム。クーパーヒューイット美術館(米国 NY 州, 2018)や Siggraph(カナダ,2018)など展示や、文化庁メディア芸術祭審査員推薦作品(日本,2014)や WIRED Common Ground Award(2022,入賞)受賞等
 {:.no-right-flow}
