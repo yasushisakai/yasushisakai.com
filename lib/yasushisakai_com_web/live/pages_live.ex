@@ -189,17 +189,11 @@ defmodule YasushisakaiComWeb.PagesLive do
 
     </div>
 
-
     <!-- List -->
     <div>
       <%= if is_nil(@results) do %>
-        <!-- just tags -->
-        <ul :if={@names != []} class="list-none p-0 grid grid-cols-[max-content_1fr] gap-x-4 gap-y-3 items-start">
-          <li class="contents text-sm uppercase tracking-white opacity-60">
-            <span class="pl-1">Name</span>
-            <span><a href="/tags">Tags</a></span>
-          </li>
-          <li :for={name <- @names} class="contents">
+        <ol :if={@names != []} class="p-0 flex flex-col gap-y-6">
+          <li :for={name <- @names} class="contents flex flex-col gap-y-2">
             <div>
               <a href={~p"/pages/#{name}"} class="font-medium">{Markdown.title(name)}</a>
               <span class="text-xs opacity-50 font-mono">{name}</span>
@@ -211,7 +205,7 @@ defmodule YasushisakaiComWeb.PagesLive do
               >{tag}</a>
             </div>
           </li>
-        </ul>
+        </ol>
       <% else %>
         <!-- search + tags -->
         <ul :if={@results != []} class="list-none p-0 grid grid-cols-[max-content_max-content_1fr] gap-x-4 gap-y-3 items-start">
